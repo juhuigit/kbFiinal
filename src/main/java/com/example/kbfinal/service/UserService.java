@@ -18,6 +18,7 @@ public class UserService {
 
     public void registerUser(User user) {
         // 비밀번호를 암호화하여 저장
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         // password를 인코딩
         // user entity에 인코딩 된 password를 넣기
         userRepository.save(user);
@@ -35,4 +36,37 @@ public class UserService {
    }
 
     // 이후 컨트롤러에서 들어오게 될  내용 추가 구현하기
+    // user 정보를 삭제하는 메서드
+    public boolean deleteUser(Long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    // user 정보를 수정하는 메서드
+    public User updateUser(Long id, User userDetails) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setUsername(userDetails.getUsername());
+            user.setEmail(userDetails.getEmail());
+            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            }
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    // 전체 user List를 조회하는 메서드
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // 전체 user의 숫자를 조회하는 메서드
+    public Long getUserCount() {
+        return userRepository.count();
+    }
 }
