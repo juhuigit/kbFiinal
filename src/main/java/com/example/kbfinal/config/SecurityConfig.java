@@ -2,9 +2,7 @@ package com.example.kbfinal.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Base64;
 
 @Configuration
@@ -12,10 +10,10 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new Base64PasswordEncoder();
     }
 
-    public class BCryptPasswordEncoder implements PasswordEncoder {
+    public class Base64PasswordEncoder implements PasswordEncoder {
 
         @Override
         public String encode(CharSequence rawPassword) {

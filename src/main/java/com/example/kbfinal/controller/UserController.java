@@ -1,8 +1,15 @@
 package com.example.kbfinal.controller;
 
-import org.springframework.stereotype.Controller;
+import com.example.kbfinal.entity.User;
+import com.example.kbfinal.service.UserService;
+import com.example.kbfinal.exception.UserNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -25,17 +32,18 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         boolean isRemoved = userService.deleteUser(id);
         if (!isRemoved) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new UserNotFoundException("User not found with id " + id);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     // user 정보를 수정하는 API 생성
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         User updatedUser = userService.updateUser(id, userDetails);
         if (updatedUser == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new UserNotFoundException("User not found with id " + id);
         }
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
