@@ -2,7 +2,6 @@ package com.example.kbfinal.service;
 
 import com.example.kbfinal.entity.User;
 import com.example.kbfinal.repository.UserRepository;
-import com.example.kbfinal.config.SecurityConfig.Base64PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
