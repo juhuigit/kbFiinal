@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Base64;
 
 @Configuration
 public class SecurityConfig {
@@ -14,7 +15,21 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // decoder 구현
+    public class BCryptPasswordEncoder implements PasswordEncoder {
 
+        @Override
+        public String encode(CharSequence rawPassword) {
+            return Base64.getEncoder().encodeToString(rawPassword.toString().getBytes());
+        }
 
+        @Override
+        public boolean matches(CharSequence rawPassword, String encodedPassword) {
+            String encodedRawPassword = encode(rawPassword);
+            return encodedPassword.equals(encodedRawPassword);
+        }
+
+        public String decode(String encodedPassword) {
+            return new String(Base64.getDecoder().decode(encodedPassword));
+        }
+    }
 }
